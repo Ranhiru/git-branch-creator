@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require "./git_branch_creator"
+
+branch_name = GitBranchCreator.sanitized_branch_name ARGV[0]
