@@ -13,6 +13,7 @@ describe "GitBranchCreator" do
     ["Test123", "test123"],
     ["Test 123", "test-123"],
     ["Test 123", "test-123"],
+    ["Random &@!@) [Symbol] Testing #1121 \"/ Mock @#* Test", "random-symbol-testing-1121-mock-test"],
     ["BE - Checkout/Consumer portal/Admin portal - Support VISA", "be-checkout-consumer-portal-admin-portal-support-visa"],
     ["JIRA 12212 FE - Consumer Portal - Pay now/Payment methods/Order details", "jira-12212-fe-consumer-portal-pay-now-payment-methods-order-details"],
     ["JIRA-9830 - Upgrade Google Maps", "jira-9830-upgrade-google-maps"],

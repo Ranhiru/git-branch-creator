@@ -2,6 +2,13 @@
 
 require "./git_branch_creator"
 
-branch_name = GitBranchCreator.sanitized_branch_name ARGV[0]
+user_input = ARGV[0]
+
+if user_input.nil? || user_input.strip == ""
+  STDERR.puts "Error: Invalid input"
+  exit 0
+end
+
+branch_name = GitBranchCreator.sanitized_branch_name user_input
 puts "Creating #{branch_name}"
 `git checkout -b #{branch_name}`
