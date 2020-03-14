@@ -4,7 +4,7 @@ require_relative "../git_branch_creator"
 describe "GitBranchCreator" do
   shared_examples_for "Sanitized Branch Name" do |input, expected_result|
     it "will return a sanitized branch name" do
-      expect(GitBranchCreator.santizied_branch_name(input)).to eq expected_result
+      expect(GitBranchCreator.sanitized_branch_name(input)).to eq expected_result
     end
   end
 
