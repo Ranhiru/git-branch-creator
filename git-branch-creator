@@ -1,14 +1,38 @@
 #!/usr/bin/env ruby
 
-require_relative "./git_branch_creator"
+require_relative "./utils"
+require_relative "./jira_api"
+require_relative "./credentials"
 
-user_input = ARGV[0]
+def read_user_input
+  jira_id = ARGV[0]
 
-if user_input.nil? || user_input.strip == ""
-  STDERR.puts "Error: Invalid input"
-  exit 0
+  if jira_id.nil? || jira_id.strip == ""
+    STDERR.puts "Error: Invalid input"
+    exit 0
+  end
+
+  jira_id
 end
 
-branch_name = GitBranchCreator.sanitized_branch_name user_input
-puts "Creating #{branch_name}"
-`git checkout -b #{branch_name}`
+def jira_card_title(jira_id)
+  credentials = Credentials.read_credentials
+  jira_api = JiraApi.new(credentials)
+  jira_api.title(jira_id)
+end
+
+def generate_branch_name(jira_id, title)
+  unsantized_branch_name = "#{jira_id} #{title}"
+  Utils.sanitize_branch_name unsantized_branch_name
+end
+
+def create_branch(branch_name)
+  puts "Creating #{branch_name}"
+  `git checkout -b #{branch_name}`
+end
+
+jira_id = read_user_input
+card_title = jira_card_title(jira_id)
+branch_name = generate_branch_name(jira_id, card_title)
+create_branch(branch_name)
+

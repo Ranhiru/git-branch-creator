@@ -1,6 +1,6 @@
-class GitBranchCreator
-  def self.sanitized_branch_name(user_input)
-    user_input.downcase
+class Utils
+  def self.sanitize_branch_name(branch_name)
+    branch_name.downcase
       .gsub(/[^A-Za-z0-9]/, " ")
       .strip
       .squeeze(" ")
