@@ -2,22 +2,23 @@
 
 require_relative "./utils"
 require_relative "./jira_api"
-require_relative "./credentials"
+require_relative "./config"
 
 def read_user_input
-  jira_id = ARGV[0]
+  input = ARGV[0]
+  jira_id = /ENGX\-\d+/.match(input)
 
-  if jira_id.nil? || jira_id.strip == ""
+  if jira_id.nil?
     STDERR.puts "Error: Invalid input"
     exit 0
   end
 
-  jira_id
+  jira_id.to_s
 end
 
 def jira_card_title(jira_id)
-  credentials = Credentials.read_credentials
-  jira_api = JiraApi.new(credentials)
+  config = Config.read_config
+  jira_api = JiraApi.new(config)
   jira_api.title(jira_id)
 end
 
@@ -35,4 +36,3 @@ jira_id = read_user_input
 card_title = jira_card_title(jira_id)
 branch_name = generate_branch_name(jira_id, card_title)
 create_branch(branch_name)
-

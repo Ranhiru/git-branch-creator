@@ -3,21 +3,21 @@ require 'json'
 require 'yaml'
 
 class JiraApi
-  API_ENDPOINT = "https://digit.atlassian.net/rest/api/3/issue/"
-
-  def initialize(credentials)
-    @username = credentials["username"]
-    @password = credentials["password"]
+  def initialize(config)
+    @username = config["username"]
+    @password = config["password"]
+    @apiHost = config["apiHost"]
   end
 
   def title(jira_id)
-    uri = URI(API_ENDPOINT + jira_id)
+    uri = URI(@apiHost + jira_id)
     req = Net::HTTP::Get.new(uri)
     req.basic_auth @username, @password
 
     res = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => true) {|http|
       http.request(req)
     }
+
     JSON.parse(res.body)["fields"]["summary"]
   end
 end
