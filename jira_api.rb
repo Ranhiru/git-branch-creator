@@ -10,7 +10,7 @@ class JiraApi
   end
 
   def title(jira_id)
-    uri = URI(@apiHost + jira_id)
+    uri = URI("#{@apiHost}/rest/api/2/issue/#{jira_id}")
     req = Net::HTTP::Get.new(uri)
     req.basic_auth @username, @password
 

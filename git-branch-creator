@@ -6,7 +6,7 @@ require_relative "./config"
 
 def read_user_input
   input = ARGV[0]
-  jira_id = /ENGX\-\d+/.match(input)
+  jira_id = /PRI\-\d+/.match(input)
 
   if jira_id.nil?
     STDERR.puts "Error: Invalid input"
@@ -16,15 +16,36 @@ def read_user_input
   jira_id.to_s
 end
 
+def select_branch_prefix
+  prefixes = ["feat/", "fix/", "chore/", "refactor/", "none"]
+
+  puts "Select branch prefix:"
+  prefixes.each_with_index do |prefix, index|
+    default_marker = index == 0 ? " (default)" : ""
+    puts "  #{index + 1}) #{prefix}#{default_marker}"
+  end
+
+  print "Enter choice [1-#{prefixes.length}]: "
+  input = STDIN.gets.chomp
+  choice = input.empty? ? 1 : input.to_i
+
+  if choice < 1 || choice > prefixes.length
+    STDERR.puts "Error: Invalid selection"
+    exit 1
+  end
+
+  prefixes[choice - 1] == "none" ? "" : prefixes[choice - 1]
+end
+
 def jira_card_title(jira_id)
   config = Config.read_config
   jira_api = JiraApi.new(config)
   jira_api.title(jira_id)
 end
 
-def generate_branch_name(jira_id, title)
+def generate_branch_name(prefix, jira_id, title)
   unsantized_branch_name = "#{jira_id} #{title}"
-  Utils.sanitize_branch_name unsantized_branch_name
+  "#{prefix}#{Utils.sanitize_branch_name(unsantized_branch_name)}"
 end
 
 def create_branch(branch_name)
@@ -33,6 +54,7 @@ def create_branch(branch_name)
 end
 
 jira_id = read_user_input
+prefix = select_branch_prefix
 card_title = jira_card_title(jira_id)
-branch_name = generate_branch_name(jira_id, card_title)
+branch_name = generate_branch_name(prefix, jira_id, card_title)
 create_branch(branch_name)
