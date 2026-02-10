@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Utils
   def self.sanitize_branch_name(branch_name)
     branch_name.downcase

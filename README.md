@@ -31,3 +31,20 @@ chmod 600 ~/git_branch_creator.yml
 
 * `bundle install`
 * `rspec spec/`
+
+# Make Targets
+
+This repository includes a `Makefile` for common tasks:
+
+* `make setup` - install gems (`bundle install`).
+* `make test` - run the test suite (`bundle exec rspec spec/`).
+* `make symlink` - create/update a symlink at `~/.local/bin/git-branch-creator`.
+
+Optional override for symlink destination:
+
+* `make symlink INSTALL_DIR=/usr/local/bin`
+
+Optional override for Ruby toolchain command:
+
+* `make setup BUNDLE="asdf exec bundle"`
+* `make test BUNDLE="asdf exec bundle"`
